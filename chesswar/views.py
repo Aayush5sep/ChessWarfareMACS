@@ -111,6 +111,6 @@ def duelwin(request,pk):
 
 @staff_member_required(login_url='/admin/')
 def allduels(request):
-    live = Duel.objects.filter(over=False)
-    previous = Duel.objects.filter(over=True)
+    live = Duel.objects.filter(over=False).order_by('id')
+    previous = Duel.objects.filter(over=True).order_by('id')
     return render(request,'allduels.html',{'live':live,'prev':previous})
