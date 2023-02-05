@@ -11,6 +11,11 @@ class BoardAdmin(admin.ModelAdmin):
 class DuelAdmin(admin.ModelAdmin):
     readonly_fields = ('arbiter','start')
 
+admin.site.site_title="Chess Warfare"
+admin.site.site_header="Chess Warfare Administration"
+admin.site.index_title="--by Aayush"
+admin.site.enable_nav_sidebar = False
+
 admin.site.register(Registration,RegisterAdmin)
 admin.site.register(Board,BoardAdmin)
 admin.site.register(Duel,DuelAdmin)
