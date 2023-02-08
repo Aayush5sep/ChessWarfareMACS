@@ -35,6 +35,8 @@ def newduelpage(request):
 
 @staff_member_required(login_url='/admin/')
 def newduel(request):
+    if not request.user.groups.filter(name='Manage Duel Staff').exists() and not request.user.is_superuser:
+        return HttpResponse("You are not valid to do this")
     if request.method=="POST":
         arbiter = request.POST['arbiter']
         boardid = request.POST['boardid']
@@ -82,6 +84,8 @@ def duelwinpage(request):
 
 @staff_member_required(login_url='/admin/')
 def duelwin(request,pk):
+    if not request.user.groups.filter(name='Arbiters').exists():
+        return HttpResponse("You are not valid to do this")
     duel = ""
     try:
         duel = Duel.objects.get(id=pk)
