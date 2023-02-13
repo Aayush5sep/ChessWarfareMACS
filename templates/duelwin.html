@@ -21,7 +21,7 @@
             <table class="table table-striped table-bordered border-2 border-success">
                 <thead>
                     <tr>
-                      <th scope="col"><span class="text-success fst-italic">Board {{duel.board.id}}</span></th>
+                      <th scope="col"><span class="text-success fst-italic">Board {{duel.board.boardno}}</span></th>
                       <th scope="col">ID</th>
                       <th scope="col">Name</th>
                       <th scope="col">Piece Color</th>
@@ -58,7 +58,7 @@
                 </tr>
                 </tbody>
             </table>
-            <button class="btn btn-outline-success border-2" type="submit">Winner Of Board {{duel.board.id}}</button>
+            <button class="btn btn-outline-success border-2" type="submit">Winner Of Board {{duel.board.boardno}}</button>
         </form>
     </div>
     {% endfor %}

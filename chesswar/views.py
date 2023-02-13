@@ -16,7 +16,7 @@ def home(request):
 def registrations(request):
     regs = []
     for level in range(1,11):
-        reg = Registration.objects.filter(level=level).order_by('waiting','id')
+        reg = Registration.objects.filter(level=level).order_by('-waiting','id')
         if not reg:
             continue
         regs.append({level:reg})
@@ -24,6 +24,8 @@ def registrations(request):
 
 @staff_member_required(login_url='/admin/')
 def newduelpage(request):
+    if not request.user.groups.filter(name='Manage Duel Staff').exists() and not request.user.is_superuser:
+        return HttpResponse("You are not valid to do this")
     free_boards = Board.objects.filter(busy=False)
     regs = []
     for level in range(1,11):
@@ -79,12 +81,14 @@ def newduel(request):
 
 @staff_member_required(login_url='/admin/')
 def duelwinpage(request):
+    if not request.user.groups.filter(name='Arbiters').exists() and not request.user.is_superuser:
+        return HttpResponse("You are not valid to do this")
     duels = Duel.objects.filter(over=False)
     return render(request,'duelwin.html',{'duels':duels})
 
 @staff_member_required(login_url='/admin/')
 def duelwin(request,pk):
-    if not request.user.groups.filter(name='Arbiters').exists():
+    if not request.user.groups.filter(name='Arbiters').exists() and not request.user.is_superuser:
         return HttpResponse("You are not valid to do this")
     duel = ""
     try:
