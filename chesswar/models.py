@@ -4,8 +4,6 @@ class Registration(models.Model):
     name = models.CharField("Participant Name",max_length=40)
     email = models.EmailField("Participant Email",unique=True)
     phone = models.CharField("Participant Contact",max_length=10,unique=True)
-    byes = models.IntegerField("Number Of Byes Given", default=0)
-    last_white = models.BooleanField(default=False)
 
     level = models.IntegerField("Round Number Qualified For",default=1)
     waiting = models.BooleanField("In Waiting?",default=True)
