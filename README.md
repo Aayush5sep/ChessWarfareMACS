@@ -4,15 +4,45 @@
 - The tournament consisted of **150+ participants** and **150+ games** were held in total.
 - The application helped in coordination between **20+ staff members** including Arbiters, Registration-staff & Duel Setup staff etc to conduct the operations smoothly.
 
+![homepage](https://drive.google.com/uc?id=1jc9RU5U3k00R3uYeCDktrotv78KcoGR6)
+
+
 ## Management Controls
+The homepage at `localhosturl/` gives all the following options to access them to the allowed users.
+However, the link is being mentioned as well to directly visit. 
 
 ### Registration Staff
+> New Registration `localhosturl/admin/chesswar/registration/`
+![new registration](https://drive.google.com/uc?id=1IOlzywPP5Ik7Sqc42BjDv9Y_FMo3Afz6)
+
+> New Board Setup `localhosturl/admin/chesswar/board/`
+![new board](https://drive.google.com/uc?id=1pe28Whz8fttLA4DiUJLCmKxJ7iIBRKBf)
+
 
 ### Duel Setup Staff
 
+> Duel Setup `localhosturl/newduelpage/`
+![new duel](https://drive.google.com/uc?id=1_maIaCHYL8ITWglqMp218lPriNLhfWs7)
+
+
 ### Arbiters
 
-### Admin Control
+> Announce Result `localhosturl/duelwinpage/`
+![arbiter](https://drive.google.com/uc?id=1wk6jEDGurfjS4ifwiLPCS5R--pFsBIHi)
+
+
+
+### View Only (For Staff)
+All staff members after logging in by any of the roles can check the current status of tournament.
+
+**All Registrations sorted by Qualified Levels**
+> ![all registrations](https://drive.google.com/uc?id=191GouMq0Gc8j3Fn0EDxplJj_DX2tD8I7)
+**Waiting** shows if they are still eligible to qualify for the next level or not
+![waiting list](https://drive.google.com/uc?id=1shS_eT8p05-_j6u3k19FGHr9jVLThyMT)
+
+**Ongoing & Completed Duels**
+> ![all duels](https://drive.google.com/uc?id=1NZMAC-Iu80WxUAUi2q9ugIcFIm-426Kn)
+
 
 
 
@@ -41,7 +71,7 @@ pipenv shell
 
 
 ### 4. Migrate the project.
-Run the following commands in terminal.
+Run the following commands in terminal(optional).
 ```sh
 python manage.py makemigrations
 python manage.py migrate
@@ -52,6 +82,21 @@ Run the following command in terminal to start the server.
 ```sh
 python manage.py runserver
 ```
+
+### 6. Login as per role assigned
+`localhosturl/`
+![login](https://drive.google.com/uc?id=19anxvrODcpHhlsZBGGB6hEqiBobVifna)
+
+| Role | Username | Password |
+|------|----------|----------|
+| Registration | registerstaff@macs | secretpass@newreg |
+| Duel Setup | duelmanager@macs | startduel@waitings |
+| Arbiters | arbiters@macs | announcewinner@duel |
+| Superuser(All perms) | macdev@admin | pass@devlogin |
+
+> **Note :** For different id & passwords, you can add the new users to the corresponding groups of Arbiters, Duel, Register by logging in as superuser.
+![groups](https://drive.google.com/uc?id=1wejqI-1bGx_d2jDnqTUUMvePhy_lAEm8)
+
 
 ## Contributing to the Project
 ### 1. Fork the repository
