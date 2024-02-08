@@ -6,13 +6,13 @@ from django.http import HttpResponse
 
 # user.groups.filter(name='Member').exists()
 
-@login_required(login_url='/admin/')
+@login_required(login_url='/user/loginpage/')
 def home(request):
     # View all options for registration,board,duel
     return render(request,'index.html')
 
 
-@staff_member_required(login_url='/admin/')
+@staff_member_required(login_url='/user/loginpage/')
 def registrations(request):
     regs = []
     for level in range(1,11):
@@ -22,7 +22,7 @@ def registrations(request):
         regs.append({level:reg})
     return render(request,'registrations.html',{'registrations':regs})
 
-@staff_member_required(login_url='/admin/')
+@staff_member_required(login_url='/user/loginpage/')
 def newduelpage(request):
     if not request.user.groups.filter(name='Manage Duel Staff').exists() and not request.user.is_superuser:
         return HttpResponse("You are not valid to do this")
@@ -35,7 +35,7 @@ def newduelpage(request):
         regs.append({level:reg})
     return render(request,'newduel.html',{'boards':free_boards,'waitings':regs})
 
-@staff_member_required(login_url='/admin/')
+@staff_member_required(login_url='/user/loginpage/')
 def newduel(request):
     if not request.user.groups.filter(name='Manage Duel Staff').exists() and not request.user.is_superuser:
         return HttpResponse("You are not valid to do this")
@@ -79,14 +79,14 @@ def newduel(request):
     else:
         return HttpResponse("Invalid Request - Not Secure")
 
-@staff_member_required(login_url='/admin/')
+@staff_member_required(login_url='/user/loginpage/')
 def duelwinpage(request):
     if not request.user.groups.filter(name='Arbiters').exists() and not request.user.is_superuser:
         return HttpResponse("You are not valid to do this")
     duels = Duel.objects.filter(over=False)
     return render(request,'duelwin.html',{'duels':duels})
 
-@staff_member_required(login_url='/admin/')
+@staff_member_required(login_url='/user/loginpage/')
 def duelwin(request,pk):
     if not request.user.groups.filter(name='Arbiters').exists() and not request.user.is_superuser:
         return HttpResponse("You are not valid to do this")
@@ -117,7 +117,7 @@ def duelwin(request,pk):
     winner.save()
     return redirect("/duelwinpage/")
 
-@staff_member_required(login_url='/admin/')
+@staff_member_required(login_url='/user/loginpage/')
 def allduels(request):
     live = Duel.objects.filter(over=False).order_by('id')
     previous = Duel.objects.filter(over=True).order_by('id')

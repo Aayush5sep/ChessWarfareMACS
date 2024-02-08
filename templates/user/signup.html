@@ -14,7 +14,9 @@
         <h1 class="text-success pt-0">Sign Up</h1>
     </center><br>
     {% if user.is_authenticated %}
-    <h2 class="fw-bold">You Are Already Logged In </h2>
+    <center>
+      <h2 class="has-text-link mt-5">You Are Already Logged In <br><a href="/user/logout/">Logout</a></h2>
+    </center>
     {% else %}
     <center>
       <div class="card py-4 w-50 border-success mb-5">
@@ -53,6 +55,13 @@
           </div>
           <button type="submit" class="btn btn-success">Sign Up</button>
         </form>
+        <div class="form-group mt-2">
+          <div class="form-check">
+            <label class="form-check-label" for="invalidCheck2">
+              Already Registered? <a href="/user/loginpage/">Login</a>
+            </label>
+          </div>
+        </div>
       </div>
 
     {% endif %}

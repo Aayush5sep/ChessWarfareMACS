@@ -8,5 +8,5 @@ urlpatterns = [
     path('login/',views.loginuser),
     path('newaccnt/',views.signupuser),
     path('newaccntpage/',views.signuppage),
-    path('logout',views.logoutuser),
+    path('logout/',views.logoutuser),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

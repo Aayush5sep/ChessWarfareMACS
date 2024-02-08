@@ -15,7 +15,9 @@
     </center><br>
 {% load static %}
     {% if user.is_authenticated %}
-    <h2 class="has-text-link">You Are Already Logged In </h2>
+    <center>
+    <h2 class="has-text-link mt-5">You Are Already Logged In <br><a href="/user/logout/">Logout</a></h2>
+    </center>
     {% else %}
     <center>
 
@@ -31,6 +33,13 @@
           </div>
           <button type="submit" class="btn btn-success">Login</button>
         </form>
+        <div class="form-group mt-2">
+          <div class="form-check">
+            <label class="form-check-label" for="invalidCheck2">
+              Not Registered Yet? <a href="/user/newaccntpage/">Register</a>
+            </label>
+          </div>
+        </div>
       </div>
     </center>
     
