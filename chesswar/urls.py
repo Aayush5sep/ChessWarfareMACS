@@ -27,4 +27,5 @@ urlpatterns = [
     path('duelwin/<int:pk>',views.duelwin),
     path('allduels/',views.allduels),
     path('user/',include('user.urls')),
+    path('live/',views.scoreboard),
 ]

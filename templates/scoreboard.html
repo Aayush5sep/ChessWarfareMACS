@@ -6,12 +6,17 @@
 <body>
 
     <center>
+        {% if user.is_authenticated %}
+        <h4 class="text-success pt-2" style="position:absolute; right:20px"><a href="/user/logout/">Logout</a></h4>
+        {% else %}
+        <h4 class="text-success pt-2" style="position:absolute; right:20px"><a href="/user/loginpage/">Login</a></h4>
+        {% endif %}
         <h2 class="text-success-emphasis pt-4 mb-1">
             <img src="https://images.chesscomfiles.com/uploads/v1/images_users/tiny_mce/SamCopeland/phpmeXx6V.png" style="max-width:4%">
             <a href="/" class="text-success-emphasis text-decoration-underline">Chess Warfare 2.O</a>
             <img src="https://images.chesscomfiles.com/uploads/v1/images_users/tiny_mce/SamCopeland/phpmeXx6V.png" style="max-width:4%">
         </h2>
-        <h1 class="text-success pt-0">All Duels</h1>
+        <h1 class="text-success pt-0">Live Scorecard</h1>
     </center><br>
     
     <div class="ms-4 col-11">

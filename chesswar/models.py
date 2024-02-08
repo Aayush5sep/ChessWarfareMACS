@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class Registration(models.Model):
     name = models.CharField("Participant Name",max_length=40)
@@ -29,7 +30,7 @@ class Duel(models.Model):
     player1 = models.ForeignKey(Registration,on_delete=models.DO_NOTHING,verbose_name="Player-White-Piece",related_name="PlayerWhitePiece")
     player2 = models.ForeignKey(Registration,on_delete=models.DO_NOTHING,verbose_name="Player-Black-Piece",related_name="PlayerBlackPiece")
     winner = models.ForeignKey(Registration,on_delete=models.DO_NOTHING,verbose_name="Board Winner",related_name="BoardWinner",null=True,blank=True)
-    arbiter = models.CharField(max_length=40,null=True,blank=True)
+    arbiter = models.ForeignKey(User,on_delete=models.DO_NOTHING,verbose_name="Arbiter Name",null=True,blank=True)
     level = models.IntegerField(default=1)
     start = models.DateTimeField("Starting Time",auto_now_add=True)
     over = models.BooleanField("Duel Over?",default=False)

@@ -6,10 +6,20 @@ from django.http import HttpResponse
 
 # user.groups.filter(name='Member').exists()
 
-@login_required(login_url='/user/loginpage/')
+def is_member(user):
+    return user.groups.filter(name='Manage Duel Staff').exists() or user.groups.filter(name='Arbiters').exists() or user.groups.filter(name='Registration Staff').exists() or user.is_superuser
+
+
 def home(request):
     # View all options for registration,board,duel
-    return render(request,'index.html')
+    if is_member(request.user):
+        return render(request,'index.html')
+    return scoreboard(request)
+
+def scoreboard(request):
+    live = Duel.objects.filter(over=False).order_by('id')
+    previous = Duel.objects.filter(over=True).order_by('id')
+    return render(request,'scoreboard.html',{'live':live,'prev':previous})
 
 
 @staff_member_required(login_url='/user/loginpage/')
@@ -22,7 +32,7 @@ def registrations(request):
         regs.append({level:reg})
     return render(request,'registrations.html',{'registrations':regs})
 
-@staff_member_required(login_url='/user/loginpage/')
+@login_required(login_url='/user/loginpage/')
 def newduelpage(request):
     if not request.user.groups.filter(name='Manage Duel Staff').exists() and not request.user.is_superuser:
         return HttpResponse("You are not valid to do this")
@@ -35,12 +45,11 @@ def newduelpage(request):
         regs.append({level:reg})
     return render(request,'newduel.html',{'boards':free_boards,'waitings':regs})
 
-@staff_member_required(login_url='/user/loginpage/')
+@login_required(login_url='/user/loginpage/')
 def newduel(request):
     if not request.user.groups.filter(name='Manage Duel Staff').exists() and not request.user.is_superuser:
         return HttpResponse("You are not valid to do this")
     if request.method=="POST":
-        arbiter = request.POST['arbiter']
         boardid = request.POST['boardid']
         playerwhite = request.POST['playerwhite']
         playerblack = request.POST['playerblack']
@@ -50,6 +59,8 @@ def newduel(request):
             board = Board.objects.get(id=boardid)
         except:
             return HttpResponse("Board not found")
+        if board.busy == True:
+            return HttpResponse("Board is Not Vacant Yet")
         player1 = ""
         player2 = ""
         try:
@@ -66,9 +77,7 @@ def newduel(request):
             return HttpResponse("Player 2 is not in waiting list")
         if player1.level != player2.level and player2.level != level:
             return HttpResponse("Player Are Not at Same Level. Contact Developer")
-        if board.busy == True:
-            return HttpResponse("Board is Not Vacant Yet")
-        Duel(arbiter=arbiter,board=board,player1=player1,player2=player2,level=level).save()
+        Duel(board=board,player1=player1,player2=player2,level=level).save()
         player1.waiting = False
         player1.save()
         player2.waiting = False
@@ -79,14 +88,14 @@ def newduel(request):
     else:
         return HttpResponse("Invalid Request - Not Secure")
 
-@staff_member_required(login_url='/user/loginpage/')
+@login_required(login_url='/user/loginpage/')
 def duelwinpage(request):
     if not request.user.groups.filter(name='Arbiters').exists() and not request.user.is_superuser:
         return HttpResponse("You are not valid to do this")
     duels = Duel.objects.filter(over=False)
     return render(request,'duelwin.html',{'duels':duels})
 
-@staff_member_required(login_url='/user/loginpage/')
+@login_required(login_url='/user/loginpage/')
 def duelwin(request,pk):
     if not request.user.groups.filter(name='Arbiters').exists() and not request.user.is_superuser:
         return HttpResponse("You are not valid to do this")
@@ -100,24 +109,25 @@ def duelwin(request,pk):
     try:
         winner = Registration.objects.get(id=winnerid)
     except:
-        return HttpResponse("Requested Winner not registered")
+        return HttpResponse("Winner is not registered")
     boardid = request.POST['boardid']
     board = ""
     try:
         board = Board.objects.get(id=boardid)
     except:
-        return HttpResponse("No Board Found for the game")
+        return HttpResponse("No Board found for the game")
     duel.winner = winner
     duel.over = True
+    duel.arbiter = request.user
     duel.save()
     board.busy = False
     board.save()
     winner.waiting = True
-    winner.level = winner.level+1
+    winner.level = (winner.level + 1)
     winner.save()
     return redirect("/duelwinpage/")
 
-@staff_member_required(login_url='/user/loginpage/')
+@login_required(login_url='/user/loginpage/')
 def allduels(request):
     live = Duel.objects.filter(over=False).order_by('id')
     previous = Duel.objects.filter(over=True).order_by('id')
