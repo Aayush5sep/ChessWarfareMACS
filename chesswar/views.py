@@ -17,9 +17,19 @@ def home(request):
     return scoreboard(request)
 
 def scoreboard(request):
-    live = Duel.objects.filter(over=False).order_by('id')
-    previous = Duel.objects.filter(over=True).order_by('id')
-    return render(request,'scoreboard.html',{'live':live,'prev':previous})
+    total = Registration.objects.all().count()
+    waiting = Registration.objects.filter(waiting=True).count()
+    live = []
+    previous = []
+    for lvl in range(1,11):
+        duels = Duel.objects.filter(level=lvl,over=False).order_by('id')
+        if len(duels)>0:
+            live.append({'level':lvl,'duels':duels})
+    for lvl in range(1,11):
+        duels = Duel.objects.filter(level=lvl,over=True).order_by('id')
+        if len(duels)>0:
+            previous.append({'level':lvl,'duels':duels})
+    return render(request,'scoreboard.html',{'live':live,'prev':previous,'total':total,'waiting':waiting})
 
 
 @staff_member_required(login_url='/user/loginpage/')
@@ -120,11 +130,11 @@ def duelwin(request,pk):
     duel.over = True
     duel.arbiter = request.user
     duel.save()
-    board.busy = False
-    board.save()
     winner.waiting = True
     winner.level = (winner.level + 1)
     winner.save()
+    board.busy = False
+    board.save()
     return redirect("/duelwinpage/")
 
 @login_required(login_url='/user/loginpage/')
