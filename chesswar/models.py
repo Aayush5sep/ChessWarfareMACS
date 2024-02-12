@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 class Registration(models.Model):
     name = models.CharField("Participant Name",max_length=40)
-    email = models.EmailField("Participant Email",unique=True)
+    email = models.EmailField("Participant Email",unique=True,null=True,blank=True)
     phone = models.CharField("Participant Contact",max_length=10,unique=True)
 
     level = models.IntegerField("Round Number Qualified For",default=1)
@@ -11,6 +11,8 @@ class Registration(models.Model):
 
     reg_time = models.DateTimeField("Registration Time",auto_now_add=True)
     last_round = models.DateTimeField("Time Of Last Round Played",auto_now=True)
+
+    times_white_played = models.IntegerField(default=0)
 
     def __str__(self):
         return str(self.id)+ ") " + self.name
@@ -37,3 +39,12 @@ class Duel(models.Model):
 
     def __str__(self):
         return "Board " + str(self.board.boardno) + " : " + self.player1.name + " v/s " + self.player2.name
+    
+class Annoucements(models.Model):
+    message = models.TextField()
+    warning_alert = models.BooleanField(default=False)
+    danger_alert = models.BooleanField(default=False)
+    success_alert = models.BooleanField(default=False)
+
+    def ___str__(self):
+        return self.message[20]

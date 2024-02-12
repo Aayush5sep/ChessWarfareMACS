@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Registration,Board,Duel
+from .models import Registration,Board,Duel,Annoucements
 
 class RegisterAdmin(admin.ModelAdmin):
     readonly_fields = ('reg_time','last_round')
@@ -19,3 +19,4 @@ admin.site.enable_nav_sidebar = False
 admin.site.register(Registration,RegisterAdmin)
 admin.site.register(Board,BoardAdmin)
 admin.site.register(Duel,DuelAdmin)
+admin.site.register(Annoucements)

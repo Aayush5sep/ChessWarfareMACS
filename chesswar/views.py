@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from .models import Registration,Board,Duel
+from .models import Registration,Board,Duel,Annoucements
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.http import HttpResponse
@@ -19,6 +19,7 @@ def home(request):
 def scoreboard(request):
     total = Registration.objects.all().count()
     waiting = Registration.objects.filter(waiting=True).count()
+    alerts = Annoucements.objects.all().order_by('-id')
     live = []
     previous = []
     for lvl in range(1,11):
@@ -29,7 +30,7 @@ def scoreboard(request):
         duels = Duel.objects.filter(level=lvl,over=True).order_by('id')
         if len(duels)>0:
             previous.append({'level':lvl,'duels':duels})
-    return render(request,'scoreboard.html',{'live':live,'prev':previous,'total':total,'waiting':waiting})
+    return render(request,'scoreboard.html',{'live':live,'prev':previous,'total':total,'waiting':waiting,'alerts':alerts})
 
 
 @staff_member_required(login_url='/user/loginpage/')
@@ -49,7 +50,8 @@ def newduelpage(request):
     free_boards = Board.objects.filter(busy=False)
     regs = []
     for level in range(1,11):
-        reg = Registration.objects.filter(level=level,waiting=True).order_by('id')
+        reg = Registration.objects.filter(level=level,waiting=True).order_by('times_white_played')
+        # rev_reg = Registration.objects.filter(level=level,waiting=True).order_by('-times_white_played')
         if not reg:
             continue
         regs.append({level:reg})
@@ -89,6 +91,7 @@ def newduel(request):
             return HttpResponse("Player Are Not at Same Level. Contact Developer")
         Duel(board=board,player1=player1,player2=player2,level=level).save()
         player1.waiting = False
+        player1.times_white_played += 1
         player1.save()
         player2.waiting = False
         player2.save()

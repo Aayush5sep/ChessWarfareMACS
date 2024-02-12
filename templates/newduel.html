@@ -67,7 +67,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for reg in regs %}
+                    {% for reg in regs reversed %}
                         <tr>
                             <th scope="row"><input class="form-check-input" type="radio" name="playerblack" id="exampleRadios2" value="{{reg.id}}" style="outline:1px solid green"></th>
                             <label class="form-check-label mt-0" for="exampleRadios2">
